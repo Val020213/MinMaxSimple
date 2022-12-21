@@ -39,13 +39,27 @@ public class TicTacToe : BoardGame
             }
         }
     }
+    private string PrintRegulator(Mark mark)
+    {
+        switch (mark)
+        {
+            case Mark.None:
+                return "|   |";
+            case Mark.X:
+                return "| X |";
+            case Mark.O:
+                return "| O |";
+            default:
+                return "|  |";
+        }
+    }
     public void PrintBoard()
     {
         for (int i = 0; i < 3; i++)
         {
             for (int j = 0; j < 3; j++)
             {
-                Console.Write(Board[i, j] + " ");
+                Console.Write(PrintRegulator(Board[i, j]));
             }
             Console.WriteLine();
         }
