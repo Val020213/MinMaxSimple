@@ -4,15 +4,15 @@ public static class Helper
     public static Coords ReadCoords()
     {
         System.Console.Write("Enter row: ");
-        int row = int.Parse(ReadCorrect());
+        int row = int.Parse(ReadCorrect("Enter row: "));
 
         System.Console.Write("Enter col: ");
-        int col = int.Parse(ReadCorrect());
+        int col = int.Parse(ReadCorrect("Enter col: "));
 
         return new Coords(row, col);
     }
 
-    public static string ReadCorrect()
+    public static string ReadCorrect(string messange)
     {
 
         string? temp = null;
@@ -24,6 +24,8 @@ public static class Helper
             {
                 temp = null;
                 System.Console.WriteLine("Try again!");
+                System.Console.Write(messange);
+                
             }
         }
         return temp;

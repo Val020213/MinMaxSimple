@@ -49,6 +49,7 @@ public class TicTacToe : BoardGame
             }
             Console.WriteLine();
         }
+        Console.WriteLine();
     }
     public override Mark Win()
     {
@@ -100,7 +101,6 @@ public class TicTacToe : BoardGame
         return Clon;
     }
 }
-
 public class MinMaxPlayer
 {
     public Mark Mark { get; }
@@ -109,11 +109,11 @@ public class MinMaxPlayer
     public MinMaxPlayer(Mark mark, BoardGame game)
     {
         Mark = mark;
-        InitialGame = game.Clone();
+        InitialGame = game;
     }
     public Coords Play()
     {
-        (int, Coords) result = MinMax(Mark, InitialGame);
+        (int, Coords) result = MinMax(Mark, InitialGame.Clone());
         Thread.Sleep(1000);
         MoveLikeJagger(result.Item2); //coment this line to don't play
         return result.Item2;
