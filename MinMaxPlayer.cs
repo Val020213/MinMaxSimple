@@ -17,13 +17,14 @@ public abstract class BoardGame : IGame
     public abstract Mark[,] Board { get; }
     public abstract bool Play(int i, int j, Mark mark);
     public abstract bool Win();
+    public abstract BoardGame Clone();
+
 }
 public class CeritoCruz : BoardGame
 {
     public override Mark[,] Board { get; } = new Mark[3, 3];
 
-//agua
-    public CeritoCruz() 
+    public CeritoCruz()
     {
         ClearBoard();
     }
@@ -75,8 +76,24 @@ public class CeritoCruz : BoardGame
         }
         return true;
     }
-
     public override bool Play(int i, int j, Mark mark) => (Board[i, j] != Mark.None) ? false : (Board[i, j] = mark) != Mark.None;
+
+    private void CopyBoard(Mark[,] Copyfrom)
+    {
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                Board[i, j] = Copyfrom[i, j];
+            }
+        }
+    }
+    public override BoardGame Clone()
+    {
+        CeritoCruz Clon = new CeritoCruz();
+        Clon.CopyBoard(Board);
+        return Clon;
+    }
 }
 
 public class MinMaxPlayer
@@ -86,52 +103,18 @@ public class MinMaxPlayer
     public MinMaxPlayer(Mark mark, BoardGame game)
     {
         Mark = mark;
-        Game = game;
+        Game = game.Clone();
     }
 
-    public (int,int) Play()
+    private int FinalMove(Mark playerMark)
     {
-        int bestScore = int.MinValue;
-        (int, int) bestMove = (-1, -1);
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                if (Game.Board[i, j] == Mark.None)
-                {
-                    Game.Play(i, j, Mark);
-                    int score = Minimax(Game, false);
-                    Game.Play(i, j, Mark.None);
-                    if (score > bestScore)
-                    {
-                        bestScore = score;
-                        bestMove = (i, j);
-                    }
-                }
-            }
-        }
-        return bestMove;
+        Mark winner = Game.Win() ? playerMark : Mark.None;
+
+        if (winner == Mark.None)
+            throw new InvalidOperationException($"Error in FinalMove, winner is None, {playerMark} , game has not ended");
+
+        return winner == Mark ? 1 : -1;
     }
 
-    private int Minimax(BoardGame game, bool isMaximizing)
-    {
-        if (game.Win())
-            return isMaximizing ? -1 : 1;
 
-        int bestScore = isMaximizing ? int.MinValue : int.MaxValue;
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                if (game.Board[i, j] == Mark.None)
-                {
-                    game.Play(i, j, isMaximizing ? Mark.X : Mark.O);
-                    int score = Minimax(game, !isMaximizing);
-                    game.Play(i, j, Mark.None);
-                    bestScore = isMaximizing ? Math.Max(score, bestScore) : Math.Min(score, bestScore);
-                }
-            }
-        }
-        return bestScore;
-    }
 }
