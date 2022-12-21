@@ -1,0 +1,15 @@
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\bin\Debug\net6.0\MinMaxSimple.exe
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\bin\Debug\net6.0\MinMaxSimple.deps.json
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\bin\Debug\net6.0\MinMaxSimple.runtimeconfig.json
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\bin\Debug\net6.0\MinMaxSimple.dll
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\bin\Debug\net6.0\ref\MinMaxSimple.dll
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\bin\Debug\net6.0\MinMaxSimple.pdb
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.csproj.AssemblyReference.cache
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.AssemblyInfoInputs.cache
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.AssemblyInfo.cs
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.csproj.CoreCompileInputs.cache
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.dll
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\ref\MinMaxSimple.dll
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.pdb
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\net6.0\MinMaxSimple.genruntimeconfig.cache

@@ -1,0 +1,5 @@
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\netcoreapp2.1\MinMaxSimple.csproj.AssemblyReference.cache
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\netcoreapp2.1\MinMaxSimple.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\netcoreapp2.1\MinMaxSimple.AssemblyInfoInputs.cache
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\netcoreapp2.1\MinMaxSimple.AssemblyInfo.cs
+C:\Users\Osvaldo\Desktop\Sources\MinMax\MinMaxSimple\obj\Debug\netcoreapp2.1\MinMaxSimple.csproj.CoreCompileInputs.cache
