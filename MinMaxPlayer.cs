@@ -39,7 +39,7 @@ public class TicTacToe : BoardGame
             }
         }
     }
-    private void PrintBoard()
+    public void PrintBoard()
     {
         for (int i = 0; i < 3; i++)
         {
@@ -75,7 +75,7 @@ public class TicTacToe : BoardGame
         }
         return true;
     }
-    public override bool CanPlay(int i, int j) => (Board[i, j] != Mark.None);
+    public override bool CanPlay(int i, int j) => (0 > i && i < 2 && 0 > j && j < 2) && (Board[i, j] != Mark.None);
     public override void Play(int i, int j, Mark mark)
     {
         if (!CanPlay(i, j)) throw new ArgumentException($"Cannot play on {i}, {j}.");
@@ -105,7 +105,7 @@ public class MinMaxPlayer
 {
     public Mark Mark { get; }
     public BoardGame InitialGame { get; }
-    
+
     public MinMaxPlayer(Mark mark, BoardGame game)
     {
         Mark = mark;
@@ -115,7 +115,13 @@ public class MinMaxPlayer
     {
         (int, Coords) result = MinMax(Mark, InitialGame);
         Thread.Sleep(1000);
+        MoveLikeJagger(result.Item2); //coment this line to don't play
         return result.Item2;
+    }
+
+    private void MoveLikeJagger(Coords coords)
+    {
+        InitialGame.Play(coords.i, coords.j, Mark);
     }
     private int FinalMove(Mark playerMark, BoardGame Game)
     {
@@ -167,5 +173,80 @@ public class MinMaxPlayer
 
 
     //tree para guardar las jugadas y el score
+    public class BoardPlayTree
+    {
+        public BoardGame Game { get; }
+        public int Score { get; set; }
+        public Coords Coords { get; set; }
+        public List<BoardPlayTree> Children { get; set; }
+        public BoardPlayTree(BoardGame game, int score, Coords coords)
+        {
+            Game = game.Clone();
+            Score = score;
+            Coords = coords;
+            Children = new List<BoardPlayTree>();
+        }
 
+        public void AddChild(BoardPlayTree child)
+        {
+            Children.Add(child);
+        }
+
+        public (int, Coords) GetPlay()
+        {
+            return (Score, Coords);
+        }
+
+        public (BoardPlayTree, Coords) GetBestPlay(BoardGame game)
+        {
+            BoardPlayTree? Play = (game != this.Game) ? SearchPlay(game, this) : this;
+
+            if (Play == null)
+            {
+                throw new ArgumentException("Game not found");
+            }
+
+            BoardPlayTree BestGame = Play.Children[0];
+            int score = BestGame.Score;
+            Coords coords = BestGame.Coords;
+
+            foreach (BoardPlayTree child in Play.Children)
+            {
+                if (child.Score > score)
+                {
+                    score = child.Score;
+                    coords = child.Coords;
+                    BestGame = child;
+                }
+            }
+
+            return (BestGame, coords);
+        }
+
+        public BoardPlayTree? SearchPlay(BoardGame game, BoardPlayTree current)
+        {
+            if (current.Game.Win() != Mark.None)
+            {
+                return null;
+            }
+
+            foreach (BoardPlayTree child in current.Children)
+            {
+                if (child.Game.Equals(game))
+                {
+                    return child;
+                }
+
+                BoardPlayTree? temp = SearchPlay(game, child);
+
+                if (temp != null)
+                {
+                    return temp;
+                }
+            }
+
+            return null;
+        }
+
+    }
 }
