@@ -75,7 +75,7 @@ public class TicTacToe : BoardGame
         }
         return true;
     }
-    public override bool CanPlay(int i, int j) => (0 > i && i < 2 && 0 > j && j < 2) && (Board[i, j] != Mark.None);
+    public override bool CanPlay(int i, int j) => (0 <= i && i <= 2 && 0 <= j && j <= 2) && (Board[i, j] != Mark.None);
     public override void Play(int i, int j, Mark mark)
     {
         if (!CanPlay(i, j)) throw new ArgumentException($"Cannot play on {i}, {j}.");
