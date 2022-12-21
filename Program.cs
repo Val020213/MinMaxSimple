@@ -31,7 +31,7 @@ while (true)
 
         while (!Game.CanPlay(coords.i, coords.j))
         {
-            System.Console.WriteLine("Invalid input!");
+            System.Console.WriteLine("Invalid input! You can't play there! {0} {1}", coords.i, coords.j);
             coords = Helper.ReadCoords();
         }
 
