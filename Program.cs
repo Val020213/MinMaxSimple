@@ -20,7 +20,7 @@ while (true)
 
     if (Game.Win() != Mark.None)
     {
-        System.Console.WriteLine("Game over!");
+        System.Console.WriteLine((Game.Win() == Mark.X) ? "We have Winner!!" : "Game over!");
         break;
     }
 
