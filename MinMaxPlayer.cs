@@ -2,9 +2,10 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-public interface IGame
+public struct Coords
 {
-    bool Win();
+    public Coords(int i, int j) => (this.i, this.j) = (i, j);
+    public int i, j;
 }
 public enum Mark
 {
@@ -12,23 +13,22 @@ public enum Mark
     X,
     O,
 }
-public abstract class BoardGame : IGame
+public abstract class BoardGame
 {
     public abstract Mark[,] Board { get; }
-    public abstract bool Play(int i, int j, Mark mark);
-    public abstract bool Win();
+    public abstract void Play(int i, int j, Mark mark);
+    public abstract bool CanPlay(int i, int j);
+    public abstract Mark Win();
     public abstract BoardGame Clone();
 
 }
-public class CeritoCruz : BoardGame
+public class TicTacToe : BoardGame
 {
     public override Mark[,] Board { get; } = new Mark[3, 3];
-
-    public CeritoCruz()
+    public TicTacToe()
     {
         ClearBoard();
     }
-
     private void ClearBoard()
     {
         for (int i = 0; i < 3; i++)
@@ -39,7 +39,6 @@ public class CeritoCruz : BoardGame
             }
         }
     }
-
     private void PrintBoard()
     {
         for (int i = 0; i < 3; i++)
@@ -51,20 +50,20 @@ public class CeritoCruz : BoardGame
             Console.WriteLine();
         }
     }
-
-
-    public override bool Win()
+    public override Mark Win()
     {
         for (int i = 0; i < 3; i++)
         {
-            if (AreEquals(Board[i, 0], Board[i, 1], Board[i, 2]) || AreEquals(Board[0, i], Board[1, i], Board[2, i]))
-                return true;
+            if (AreEquals(Board[i, 0], Board[i, 1], Board[i, 2]))
+                return Board[i, 0];
+            if (AreEquals(Board[0, i], Board[1, i], Board[2, i]))
+                return Board[0, i];
         }
 
         if (AreEquals(Board[0, 0], Board[1, 1], Board[2, 2]) || AreEquals(Board[0, 2], Board[1, 1], Board[2, 0]))
-            return true;
+            return Board[1, 1];
 
-        return false;
+        return Mark.None;
     }
 
     private bool AreEquals(params Mark[] marks)
@@ -76,7 +75,13 @@ public class CeritoCruz : BoardGame
         }
         return true;
     }
-    public override bool Play(int i, int j, Mark mark) => (Board[i, j] != Mark.None) ? false : (Board[i, j] = mark) != Mark.None;
+    public override bool CanPlay(int i, int j) => (Board[i, j] != Mark.None);
+    public override void Play(int i, int j, Mark mark)
+    {
+        if (!CanPlay(i, j)) throw new ArgumentException($"Cannot play on {i}, {j}.");
+
+        Board[i, j] = mark;
+    }
 
     private void CopyBoard(Mark[,] Copyfrom)
     {
@@ -90,7 +95,7 @@ public class CeritoCruz : BoardGame
     }
     public override BoardGame Clone()
     {
-        CeritoCruz Clon = new CeritoCruz();
+        TicTacToe Clon = new TicTacToe();
         Clon.CopyBoard(Board);
         return Clon;
     }
@@ -99,22 +104,68 @@ public class CeritoCruz : BoardGame
 public class MinMaxPlayer
 {
     public Mark Mark { get; }
-    public BoardGame Game { get; }
+    public BoardGame InitialGame { get; }
+    
     public MinMaxPlayer(Mark mark, BoardGame game)
     {
         Mark = mark;
-        Game = game.Clone();
+        InitialGame = game.Clone();
     }
-
-    private int FinalMove(Mark playerMark)
+    public Coords Play()
     {
-        Mark winner = Game.Win() ? playerMark : Mark.None;
+        (int, Coords) result = MinMax(Mark, InitialGame);
+        Thread.Sleep(1000);
+        return result.Item2;
+    }
+    private int FinalMove(Mark playerMark, BoardGame Game)
+    {
+        Mark winner = Game.Win();
 
         if (winner == Mark.None)
             throw new InvalidOperationException($"Error in FinalMove, winner is None, {playerMark} , game has not ended");
 
-        return winner == Mark ? 1 : -1;
+        return winner == playerMark ? 1 : -1;
     }
 
+    private (int, Coords) MinMax(Mark playerMark, BoardGame Game, int value = int.MinValue, bool isMax = true)
+    {
+        int score = value;
+        Coords coords = new Coords(-1, -1);
+
+        for (int i = 0; i < 3; i++)
+        {
+            for (int j = 0; j < 3; j++)
+            {
+                if (!Game.CanPlay(i, j)) continue;
+
+                BoardGame Simulation = Game.Clone();
+                Simulation.Play(i, j, playerMark);
+
+                int counterScore = 0;
+
+                if (Simulation.Win() == Mark.None)
+                    (counterScore, _) = MinMax(playerMark == Mark.X ? Mark.O : Mark.X, Simulation, int.MaxValue, !isMax);
+
+                else //parece un poco obvio que si juego y se acaba el juego fue porque gane, pero en otro juego != TicTacToe puede que no sea asi
+                    counterScore = FinalMove(playerMark, Simulation);
+
+                if (isMax && counterScore > score)
+                {
+                    score = counterScore;
+                    coords = new Coords(i, j);
+                }
+
+                else if (!isMax && counterScore < score)
+                {
+                    score = counterScore;
+                    coords = new Coords(i, j);
+                }
+            }
+        }
+        return (score, coords);
+    }
+
+
+    //tree para guardar las jugadas y el score
 
 }
