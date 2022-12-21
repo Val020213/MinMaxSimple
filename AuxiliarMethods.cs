@@ -20,7 +20,11 @@ public static class Helper
         while (temp == null)
         {
             temp = System.Console.ReadLine();
-            if (!NumberTryParse(temp)) temp = null;
+            if (!NumberTryParse(temp))
+            {
+                temp = null;
+                System.Console.WriteLine("Try again!");
+            }
         }
         return temp;
     }
@@ -33,13 +37,13 @@ public static class Helper
             int error = int.Parse(temp);
             if (error < 0 || error > 2)
             {
-                System.Console.WriteLine("Invalid input!");
+                System.Console.WriteLine("Invalid input! Must be a number between 0 and 2!");
                 return false;
             }
         }
         catch (Exception)
         {
-            System.Console.WriteLine("Invalid input!");
+            System.Console.WriteLine("Invalid input! Must be a number");
             return false;
         }
 
