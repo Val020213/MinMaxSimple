@@ -1,14 +1,21 @@
+using System.Linq;
+using System;
+using System.IO;
+using System.Collections.Generic;
 
 public struct Coords
 {
     public Coords(int i, int j) => (this.i, this.j) = (i, j);
     public int i, j;
+
+    public static Coords operator +(Coords A, Coords B) => new Coords(A.i + B.i, A.j + B.j);
 }
 public enum Mark
 {
     None,
     X,
     O,
+    Empate,
 }
 public abstract class BoardGame
 {
@@ -47,7 +54,7 @@ public class TicTacToe : BoardGame
             case Mark.O:
                 return "| O |";
             default:
-                return "|  |";
+                return "|   |";
         }
     }
     public void PrintBoard()
@@ -64,19 +71,62 @@ public class TicTacToe : BoardGame
     }
     public override Mark Win()
     {
-        for (int i = 0; i < 3; i++)
+        Mark current = CheckLine();
+        if (current != Mark.None) return current;
+
+        for (int i = 0; i < Board.GetLength(0); i++)
         {
-            if (AreEquals(Board[i, 0], Board[i, 1], Board[i, 2]))
-                return Board[i, 0];
-            if (AreEquals(Board[0, i], Board[1, i], Board[2, i]))
-                return Board[0, i];
+            for (int j = 0; j < Board.GetLength(1); j++)
+            {
+                if (Board[i, j] == Mark.None) continue;
+                if (CheckD(new Coords(i, j), new Coords(1, 1), 1, Board[i, j])) return Board[i, j];
+                if (CheckD(new Coords(i, j), new Coords(1, -1), 1, Board[i, j])) return Board[i, j];
+            }
         }
 
-        if (AreEquals(Board[0, 0], Board[1, 1], Board[2, 2]) || AreEquals(Board[0, 2], Board[1, 1], Board[2, 0]))
-            return Board[1, 1];
+        for (int i = 0; i < Board.GetLength(0); i++)
+        {
+            for (int j = 0; j < Board.GetLength(1); j++)
+            {
+                if (Board[i, j] == Mark.None) return Mark.None;
+            }
+        }
+
+        return Mark.Empate; //todas las casillas llenas
+    }
+    public Mark CheckLine()
+    {
+        for (int i = 0; i < Board.GetLength(0); i++)
+        {
+            for (int j = 0; j < Board.GetLength(1) - 2; j++)
+            {
+                if (AreEquals(Board[i, j], Board[i, j + 1], Board[i, j + 2]))
+                    return Board[i, j];
+            }
+        }
+
+        for (int i = 0; i < Board.GetLength(1); i++)
+        {
+            for (int j = 0; j < Board.GetLength(0) - 2; j++)
+            {
+                if (AreEquals(Board[j, i], Board[j + 1, i], Board[j + 2, i]))
+                    return Board[j, i];
+            }
+        }
 
         return Mark.None;
     }
+    public bool CheckD(Coords pos, Coords Dirrection, int deph, Mark current)
+    {
+        if (pos.i < 0 || pos.j < 0 || pos.i >= Board.GetLength(0) || pos.j >= Board.GetLength(1)) return false;
+
+        if (Board[pos.i, pos.j] != current) return false;
+
+        if (deph == 3) return true;
+
+        return CheckD(pos + Dirrection, Dirrection, ++deph, current);
+    }
+
 
     private bool AreEquals(params Mark[] marks)
     {
@@ -105,14 +155,14 @@ public class TicTacToe : BoardGame
             }
         }
     }
-    public override BoardGame Clone()
+    public override TicTacToe Clone()
     {
         TicTacToe Clon = new TicTacToe();
         Clon.CopyBoard(Board);
         return Clon;
     }
 
-    public bool EqualsBoards(BoardGame other) //esto realmente es para comparar los boards
+    public bool EqualsBoards(TicTacToe other) //esto realmente es para comparar los boards
     {
         if (Board.GetLength(0) != other.Board.GetLength(0) || Board.GetLength(1) != other.Board.GetLength(1))
             return false;
