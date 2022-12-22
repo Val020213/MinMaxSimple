@@ -9,8 +9,11 @@ System.Console.WriteLine("Game started!" + Separator);
 TicTacToe Game = new TicTacToe();
 
 System.Console.WriteLine("X : you\nO : PC" + Separator);
-MinMaxPlayer virtualPlayer = new MinMaxPlayer(Mark.O, Mark.X);
-bool first = false;
+//MinMaxPlayerMemory Chamocle = new MinMaxPlayerMemory(Mark.O, Mark.X);
+//MaxiMinPlayer Pelotudo = new MaxiMinPlayer(Mark.X, Mark.O);
+MinMaxPlayer Chamocle = new MinMaxPlayer(Mark.O, Mark.X);
+
+bool first = true;
 
 while (true)
 {
@@ -39,7 +42,7 @@ while (true)
     else
     {
         System.Console.WriteLine("PC turn!");
-        virtualPlayer.Play(Game);
+        Chamocle.Play(Game);
         first = true;
     }
 
