@@ -8,11 +8,9 @@ System.Console.WriteLine("Game started!" + Separator);
 
 TicTacToe Game = new TicTacToe();
 
-//MinMaxPlayer virtualPlayer = new MinMaxPlayer(Mark.O, Game);
-
 System.Console.WriteLine("X : you\nO : PC" + Separator);
 MinMaxPlayer virtualPlayer = new MinMaxPlayer(Mark.O, Mark.X);
-bool first = true;
+bool first = false;
 
 while (true)
 {
@@ -41,7 +39,6 @@ while (true)
     else
     {
         System.Console.WriteLine("PC turn!");
-        //TicTacToeAI.Play(Game);
         virtualPlayer.Play(Game);
         first = true;
     }
