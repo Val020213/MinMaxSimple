@@ -9,16 +9,14 @@ System.Console.WriteLine("Game started!" + Separator);
 TicTacToe Game = new TicTacToe();
 
 System.Console.WriteLine("X : you\nO : PC" + Separator);
-//MinMaxPlayerMemory Chamocle = new MinMaxPlayerMemory(Mark.O, Mark.X);
-//MaxiMinPlayer Pelotudo = new MaxiMinPlayer(Mark.X, Mark.O);
-MinMaxPlayer Chamocle = new MinMaxPlayer(Mark.O, Mark.X);
+MiniMaxLoco Chamocle = new MiniMaxLoco(Mark.O, Mark.X);
 
 bool first = true;
 
 while (true)
 {
     Game.PrintBoard();
-    System.Console.WriteLine(Game.Win());
+    //System.Console.WriteLine(Game.Win());
     if (Game.Win() != Mark.None)
     {
         System.Console.WriteLine((Game.Win() == Mark.X) ? "We have Winner!!" : "Game over!");
